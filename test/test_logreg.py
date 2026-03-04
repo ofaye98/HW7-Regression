@@ -15,7 +15,7 @@ from regression.logreg import LogisticRegressor
 
 def test_prediction():
 	model = LogisticRegressor(num_feats=2) # create instance of logistic regression model with 2 features
-	model.W = np.array([1.0, -1.0, 0.5]) # set weights to known values for testing
+	model.W = np.array([1.0, -1.0]) # feature weights
 
 	# create a small test dataset with 3 data points and 2 features
 	X = np.array([
