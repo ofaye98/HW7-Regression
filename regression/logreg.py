@@ -131,14 +131,8 @@ class LogisticRegressor(BaseRegressor):
         """
         X = np.asarray(X) # convert to numpy array if not already
 
-        if X.ndim == 1: # check if X is a single data point
-            X = X.reshape(1, -1) # if so reshape to be a 2D array with one row
-
-        if X.shape[1] == self.num_feats: # check if X has the correct number of features (not including bias term)
-            X = np.hstack([X, np.ones((X.shape[0], 1))]) # if so add column of ones for bias term
-
         z = X @ self.W # compute linear combination of inputs and weights (matrix multiplication)
-        y_pred = 1 / (1 + np.exp(-z)) # compute predicted probabilities using logistic function
+        y_pred = 1 / (1 + np.exp(-z)) # compute predicted probabilities using sigmoid function
         return y_pred
     
     def loss_function(self, y_true, y_pred) -> float:
@@ -153,14 +147,11 @@ class LogisticRegressor(BaseRegressor):
         Returns: 
             The mean loss (a single number).
         """
-        y_true = np.asarray(y_true).flatten() # convert to numpy array and flatten to 1D if not already
-        y_pred = np.asarray(y_pred).flatten() # repeat for y_pred
-
         eps = 1e-15 # small constant to avoid log(0) which is undefined
-        y_pred = np.clip(y_pred, eps, 1 - eps) # prevent predicted probabilities from being exactly 0 or 1, which would cause issues with the log function
+        y_pred_clipped = np.clip(y_pred, eps, 1 - eps) # prevent predicted probabilities from being exactly 0 or 1, which would cause issues with the log function
 
-        loss = -(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred)) # compute binary cross entropy loss for each data point
-        return np.mean(loss) # return the average loss over all data points 
+        loss = -np.mean(y_true * np.log(y_pred_clipped) + (1 - y_true) * np.log(1 - y_pred_clipped)) # compute binary cross entropy loss for each data point
+        return loss
         
     def calculate_gradient(self, y_true, X) -> np.ndarray:
         """
@@ -174,16 +165,10 @@ class LogisticRegressor(BaseRegressor):
         Returns: 
             Vector of gradients.
         """
-        X = np.asarray(X)
-        y_true = np.asarray(y_true).flatten()
-
-        if X.ndim == 1:
-            X = X.reshape(1, -1)
-
-        if X.shape[1] == self.num_feats:
-            X = np.hstack([X, np.ones((X.shape[0], 1))])
-
         y_pred = self.make_prediction(X) # compute predicted probabilities for given X using current weights
+        m = X.shape[0] # number of data points in the batch
         errors = y_pred - y_true 
-        grad = (X.T @ errors) / X.shape[0] # calculate mean gradient across all data points in the batch 
+
+        # formula = (1/N) * X^T @ (y_pred - y_true) << got this from https://www.askpython.com/python/examples/gradient-descent-algorithm
+        grad = (1/m) * (X.T @ errors) # calculate mean gradient across all data points in the batch 
         return grad
