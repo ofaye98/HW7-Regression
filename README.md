@@ -1,6 +1,20 @@
+* [![tests](https://github.com/ofaye98/HW7-Regression/actions/workflows/tests.yml/badge.svg)](https://github.com/ofaye98/HW7-Regression/actions/workflows/tests.yml)
 # HW 7: logistic regression
 
 In this assignment, you'll implement a classifier using logistic regression, optimized with gradient descent.
+
+## Description of Methods
+For understanding the sigmoid function I used these websites:
+* https://en.wikipedia.org/wiki/Sigmoid_function - provided formula for sigmoid function
+* https://www.geeksforgeeks.org/machine-learning/implementation-of-logistic-regression-from-scratch-using-python/ - showed an example of how sigmoid function is applied in python (used for make_prediction method)
+
+For binary cross entropy I used this website:
+* https://www.geeksforgeeks.org/deep-learning/binary-cross-entropy-log-loss-for-binary-classification/ - provided formula for binary cross entropy loss and python implementation (used for loss_function method)
+
+For gradient I used this website:
+* https://www.askpython.com/python/examples/gradient-descent-algorithm - provided formula (used for calculate_gradient method)
+
+Used chatgpt and VS code llm for debugging and brainstorming test cases.
 
 ## Overview
 
