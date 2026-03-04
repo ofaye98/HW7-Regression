@@ -169,6 +169,6 @@ class LogisticRegressor(BaseRegressor):
         m = X.shape[0] # number of data points in the batch
         errors = y_pred - y_true 
 
-        # formula = (1/N) * X^T @ (y_pred - y_true) << got this from https://www.askpython.com/python/examples/gradient-descent-algorithm
+        # formula = (1/m) * X^T @ (y_pred - y_true) << got this from https://www.askpython.com/python/examples/gradient-descent-algorithm
         grad = (1/m) * (X.T @ errors) # calculate mean gradient across all data points in the batch 
         return grad
